@@ -6,7 +6,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
   GIT_STRATEGY: none
   
-build:
+.build:
   stage: build
   only:
     - master
@@ -29,7 +29,7 @@ build:
     untracked: false
     expire_in: "7 days"
 
-deploy-dev:
+.deploy-dev:
   stage: deploy
   variables:
     namespace: dev
@@ -51,7 +51,7 @@ deploy-dev:
          kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
       done
 
-deploy-staging:
+.deploy-staging:
   stage: deploy
   variables:
     namespace: staging
@@ -72,7 +72,7 @@ deploy-staging:
          kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
       done
       
-deploy-prod:
+.deploy-prod:
   stage: deploy
   variables:
     namespace: prod
