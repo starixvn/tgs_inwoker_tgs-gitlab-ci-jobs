@@ -9,6 +9,7 @@ build:
     - release/current
     - develop
   before_script:
+    - printenv
     - echo "branch:$CI_COMMIT_BRANCH"
     - git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
@@ -23,8 +24,6 @@ build:
     name: npm
     untracked: false
     expire_in: "7 days"
-    paths:
-      - node_modules/
 
 deploy-dev:
   stage: deploy
