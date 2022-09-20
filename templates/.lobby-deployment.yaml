@@ -2,6 +2,10 @@ stages:
   - build
   - deploy
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
+  GIT_STRATEGY: none
+  
 build:
   stage: build
   only:
@@ -28,7 +32,6 @@ build:
 deploy-dev:
   stage: deploy
   variables:
-    GIT_STRATEGY: none
     namespace: dev
   environment:
     name: dev
@@ -38,6 +41,7 @@ deploy-dev:
     - develop
   before_script:
     - export KUBECONFIG=$kubeconfig_dev
+    - echo "KUBECONFIG=$KUBECONFIG"
   script:
     - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
     - |
@@ -50,7 +54,6 @@ deploy-dev:
 deploy-staging:
   stage: deploy
   variables:
-    GIT_STRATEGY: none
     namespace: staging
   environment:
     name: staging
@@ -72,7 +75,6 @@ deploy-staging:
 deploy-prod:
   stage: deploy
   variables:
-    GIT_STRATEGY: none
     namespace: prod
   environment:
     name: prod
