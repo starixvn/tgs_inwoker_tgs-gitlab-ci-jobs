@@ -41,7 +41,7 @@ deploy-dev:
     - develop
   before_script:
     - export KUBECONFIG=$kubeconfig_dev
-    - echo "KUBECONFIG=$KUBECONFIG"
+    - echo "KUBECONFIG=$kubeconfig_dev"
   script:
     - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
     - |
