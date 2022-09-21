@@ -1,0 +1,13 @@
+stages:
+  - build
+  
+.build:
+  stage: build
+  only:
+    - master
+    - release/current
+    - develop
+  script:
+    - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
+    - docker build -t ${ImageName}:${TAG} .
+    - docker push ${ImageName}:${TAG}

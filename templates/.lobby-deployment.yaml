@@ -5,9 +5,17 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
   GIT_STRATEGY: none
-  
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
+      when: never
+    - when: always
+    
 .build:
   stage: build
+  variables:
+    GIT_CHECKOUT: "true" 
   only:
     - master
     - release/current
@@ -33,6 +41,7 @@ variables:
   stage: deploy
   variables:
     namespace: dev
+    GIT_CHECKOUT: "false" 
   environment:
     name: dev
   needs:
@@ -55,6 +64,7 @@ variables:
   stage: deploy
   variables:
     namespace: staging
+    GIT_CHECKOUT: "false" 
   environment:
     name: staging
   needs:
@@ -76,6 +86,7 @@ variables:
   stage: deploy
   variables:
     namespace: prod
+    GIT_CHECKOUT: "false" 
   environment:
     name: prod
   needs:
