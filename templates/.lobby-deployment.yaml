@@ -2,9 +2,9 @@ stages:
   - build
   - deploy
 
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
-  GIT_STRATEGY: none
+#variables:
+#  GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
+#  GIT_STRATEGY: none
 
 #workflow:
 #  rules:
