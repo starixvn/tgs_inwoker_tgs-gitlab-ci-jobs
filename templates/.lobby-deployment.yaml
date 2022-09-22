@@ -14,8 +14,8 @@ variables:
     
 .build:
   stage: build
-  variables:
-    GIT_CHECKOUT: "true" 
+  #variables:
+    #GIT_CHECKOUT: "true" 
   only:
     - master
     - release/current
