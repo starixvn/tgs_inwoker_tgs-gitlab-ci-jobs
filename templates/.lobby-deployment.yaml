@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-
+  - undo
 variables:
   GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
 #  GIT_STRATEGY: none
@@ -95,6 +95,30 @@ variables:
     name: prod
   needs:
     - build
+    - deploy
+  only:
+    - master
+  before_script:
+    - export KUBECONFIG=$kubeconfig_prod
+  when: manual
+  script:
+    - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
+    - |
+      IFS=',' read -r -a componentArray <<< "$components_prod"
+      for component in "${componentArray[@]}" 
+      do
+         kubectl rollout undo deployment/${component} -n $namespace
+      done
+
+undo: 
+  stage: undo
+  variables:
+    namespace: prod
+    GIT_CHECKOUT: "false" 
+  environment:
+    name: prod
+  needs:
+    - build
   only:
     - master
   before_script:
@@ -108,7 +132,6 @@ variables:
       do
          kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
       done
-      
 notification:
   stage: .post
   script: 
