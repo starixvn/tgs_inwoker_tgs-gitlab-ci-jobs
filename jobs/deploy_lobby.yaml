@@ -1,0 +1,12 @@
+# 定义共享的作业模板
+.deploy-dev:
+  script:
+    - echo "Deploying to development environment"
+
+.deploy-staging:
+  script:
+    - echo "Deploying to staging environment"
+
+.deploy-prod:
+  script:
+    - echo "Deploying to production environment"
