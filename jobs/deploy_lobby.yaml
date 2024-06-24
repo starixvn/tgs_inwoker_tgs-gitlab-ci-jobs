@@ -1,12 +1,18 @@
-# 定义共享的作业模板
-.deploy-dev:
-  script:
-    - echo "Deploying to development environment"
+default:
+  before_script:
+    - export Tag="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d%H%M).$CI_PIPELINE_IID"
 
-.deploy-staging:
+.deploy-base:
   script:
-    - echo "Deploying to staging environment"
+    - | 
+      docker build -t ${ImageName}:${Tag} .
+      docker push ${ImageName}:${Tag}
 
-.deploy-prod:
-  script:
-    - echo "Deploying to production environment"
+      components_list=${components[$NAMESPACE]}
+
+      IFS=',' read -r -a components_array <<< "$components_list"
+
+      for component in "${components_array[@]}"; do
+        echo "Deploying component: $component"
+        kubectl set image deployment/$component $component}=${ImageName}:${TAG} --record -n $NAMESPACE
+      done
