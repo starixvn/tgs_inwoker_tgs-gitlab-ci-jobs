@@ -1,65 +1,44 @@
-stages:
-  - dns
+# inwoker/tgs/tgs-gitlab-ci-jobs/jobs/dns_utils.yaml
+before_script:
+  - |
+    create_dns() {
+      local environment=$1
+      local host=$2
 
-dev-create-dns:
-  stage: dns
-  script:
-    - |
-      existed=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$cf_zoneid_dev/dns_records?type=CNAME&name=${host}.rpgp.cc" \
+      case $environment in
+        dev)
+          cf_zoneid=$cf_zoneid_dev
+          dns_content=$dns_content_dev
+          ;;
+        staging)
+          cf_zoneid=$cf_zoneid_staging
+          dns_content=$dns_content_staging
+          ;;
+        prod)
+          cf_zoneid=$cf_zoneid_prod
+          dns_content=$dns_content_prod
+          ;;
+        *)
+          echo "Unknown environment: $environment"
+          exit 1
+          ;;
+      esac
+
+      echo "cf_zoneid=$cf_zoneid"
+      echo "dns_content=$dns_content"
+
+      existed=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$cf_zoneid/dns_records?type=CNAME&name=${host}" \
                         -H "Authorization: Bearer $cf_token" \
                         -H "Content-Type: application/json" | jq '.result | length')
 
       if [ "$existed" -eq 0 ]; then
         echo "DNS record does not exist. Creating new DNS record..."
-        result=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
+        result=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$cf_zoneid/dns_records" \
                  -H "Authorization: Bearer $cf_token" \
                  -H "Content-Type: application/json" \
-                 --data '{"type":"CNAME","name":"'${host}'","content":"'$dns_content_prod'","proxied":true}')
+                 --data '{"type":"CNAME","name":"'${host}'","content":"'$dns_content'","proxied":true}')
         echo "CreateDnsRecord: ${result}"
       else
         echo "DNS record already exists."
       fi
-  only:
-  - develop
-
-staging-create-dns:
-  stage: dns
-  script:
-    - |
-      existed=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$cf_zoneid_staging/dns_records?type=CNAME&name=${host}" \
-                        -H "Authorization: Bearer $cf_token" \
-                        -H "Content-Type: application/json" | jq '.result | length')
-
-      if [ "$existed" -eq 0 ]; then
-        echo "DNS record does not exist. Creating new DNS record..."
-        result=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$cf_zoneid_staging/dns_records" \
-                 -H "Authorization: Bearer $cf_token" \
-                 -H "Content-Type: application/json" \
-                 --data '{"type":"CNAME","name":"'${host}'","content":"'$dns_content_staging'","proxied":true}')
-        echo "CreateDnsRecord: ${result}"
-      else
-        echo "DNS record already exists."
-      fi
-  only:
-  - release/current
-
-prod-create-dns:
-  stage: dns
-  script:
-    - |
-      existed=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$cf_zoneid_prod/dns_records?type=CNAME&name=${host}" \
-                        -H "Authorization: Bearer $token" \
-                        -H "Content-Type: application/json" | jq '.result | length')
-
-      if [ "$existed" -eq 0 ]; then
-        echo "DNS record does not exist. Creating new DNS record..."
-        result=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$cf_zoneid_prod/dns_records" \
-                 -H "Authorization: Bearer $cf_token" \
-                 -H "Content-Type: application/json" \
-                 --data '{"type":"CNAME","name":"'${host}'","content":"'$dns_content_prod'","proxied":true}')
-        echo "CreateDnsRecord: ${result}"
-      else
-        echo "DNS record already exists."
-      fi
-  only:
-  - master
+    }
