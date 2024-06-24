@@ -95,7 +95,6 @@ variables:
     name: prod
   needs:
     - build
-    - deploy
   only:
     - master
   before_script:
