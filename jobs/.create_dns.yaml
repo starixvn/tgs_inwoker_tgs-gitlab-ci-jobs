@@ -1,4 +1,4 @@
-# inwoker/tgs/tgs-gitlab-ci-jobs/jobs/dns_utils.yaml
+# inwoker/tgs/tgs-gitlab-ci-jobs/jobs/create_dns.yaml
 before_script:
   - |
     create_dns() {
