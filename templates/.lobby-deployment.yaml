@@ -10,7 +10,7 @@ variables:
 
 .build:
   stage: build
-  image: pgtgs/tgs-lobby-build
+  image: pgtgs/tgs-lobby-build:latest
   before_script:
     - git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
