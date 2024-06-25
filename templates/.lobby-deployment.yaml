@@ -36,6 +36,7 @@ variables:
 
 
 .deploy-base:
+  stage: deploy
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
