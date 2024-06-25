@@ -7,7 +7,6 @@ variables:
   GIT_SUBMODULE_STRATEGY: normal
   GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   config: "kubeconfig"
-  components: "components"
 
 .build:
   stage: build
@@ -34,8 +33,6 @@ variables:
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
-    - export Components="${components}_${namespace}"
-    - export Components=${!Components}
   script:
     - | 
       Tag=$(cat tag.txt)
