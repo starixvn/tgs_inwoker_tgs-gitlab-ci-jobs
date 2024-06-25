@@ -39,7 +39,7 @@ variables:
 
 .deploy-base:
   stage: deploy
-  image: bitnami/kubectl:1.28.0
+  image: bitnami/kubernetes-tools:lates
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
