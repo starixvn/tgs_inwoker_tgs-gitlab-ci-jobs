@@ -3,19 +3,12 @@ stages:
   - deploy
   - undo
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive # 會把submodule中的submodule也引進到項目中
-#  GIT_STRATEGY: none
+  GIT_SUBMODULE_STRATEGY: recursive 
+  config: "kubeconfig"
+  components: "components"
 
-#workflow:
-#  rules:
-#    - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
-#      when: never
-#    - when: always
-    
 .build:
   stage: build
-  #variables:
-    #GIT_CHECKOUT: "true" 
   only:
     - master
     - release/current
@@ -29,17 +22,34 @@ variables:
     - git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
     - git submodule init
     - git submodule update --recursive --remote
-    #- git submodule sync
-    #- git submodule update
   script:
     - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
-    - echo "TAG=${TAG}"
+    - echo "${TAG}" > tag.txt
     - docker build -t ${ImageName}:${TAG} .
     - docker push ${ImageName}:${TAG}
   artifacts:
     name: npm
     untracked: false
     expire_in: "7 days"
+    paths:
+      - tag.txt
+
+
+.deploy-base:
+  before_script:
+    - export KUBECONFIG="${config}_${namespace}"
+    - export KUBECONFIG=${!KUBECONFIG}
+    - export Components="${components}_${namespace}"
+    - export Components=${!Components}
+  script:
+    - | 
+      Tag=$(cat tag.txt)
+      IFS=',' read -r -a components_array <<< "$Components"
+
+      for component in "${components_array[@]}"; do
+        echo "Deploying component: $component"
+        kubectl set image deployment/$component $component=${ImageName}:${Tag} --record -n $namespace
+      done
 
 .deploy-dev:
   stage: deploy
