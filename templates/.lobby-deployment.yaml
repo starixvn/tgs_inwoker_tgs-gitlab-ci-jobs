@@ -2,15 +2,24 @@ stages:
   - build
   - deploy
   - undo
+
 variables:
   GIT_STRATEGY: clone
   GIT_SUBMODULE_STRATEGY: normal
   GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375
   config: "kubeconfig"
-
+  
 .build:
   stage: build
+  image: pgtgs/tgs-lobby-build:latest
+  services:
+    - docker:20.10.16-dind
   before_script:
+    - docker info
+    - docker login -u $docker_user -p $docker_pwd
     - git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
