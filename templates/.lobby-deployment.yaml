@@ -3,7 +3,9 @@ stages:
   - deploy
   - undo
 variables:
-  GIT_SUBMODULE_STRATEGY: recursive 
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: normal
+  GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   config: "kubeconfig"
   components: "components"
 
