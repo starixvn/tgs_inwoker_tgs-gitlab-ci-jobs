@@ -36,7 +36,7 @@ variables:
   script:
     - | 
       Tag=$(cat tag.txt)
-      IFS=',' read -r -a components_array <<< "$Components"
+      IFS=',' read -r -a components_array <<< "$components"
 
       for component in "${components_array[@]}"; do
         echo "Deploying component: $component"
