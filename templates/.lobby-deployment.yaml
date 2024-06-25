@@ -39,12 +39,16 @@ variables:
   stage: deploy
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
+    - echo "KUBECONFIG=$KUBECONFIG"
     - export KUBECONFIG=${!KUBECONFIG}
+    - echo "KUBECONFIG=$KUBECONFIG"
     - export Components="${components}_${namespace}"
     - export Components=${!Components}
+    - echo "Components=$Components"
   script:
     - | 
       Tag=$(cat tag.txt)
+      echo "Tag=$Tag"
       IFS=',' read -r -a components_array <<< "$Components"
 
       for component in "${components_array[@]}"; do
