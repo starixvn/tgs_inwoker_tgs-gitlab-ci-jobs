@@ -9,14 +9,7 @@ variables:
 
 .build:
   stage: build
-  only:
-    - master
-    - release/current
-    - develop
   before_script:
-    - printenv
-    - echo "branch:$CI_COMMIT_BRANCH"
-    - pwd
     - git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
     - git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
@@ -34,94 +27,21 @@ variables:
     paths:
       - tag.txt
 
-
 .deploy-base:
   stage: deploy
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
-    - echo "KUBECONFIG=$KUBECONFIG"
     - export KUBECONFIG=${!KUBECONFIG}
-    - echo "KUBECONFIG=$KUBECONFIG"
     - export Components="${components}_${namespace}"
     - export Components=${!Components}
-    - echo "Components=$Components"
   script:
     - | 
       Tag=$(cat tag.txt)
-      echo "Tag=$Tag"
       IFS=',' read -r -a components_array <<< "$Components"
 
       for component in "${components_array[@]}"; do
         echo "Deploying component: $component"
         kubectl set image deployment/$component $component=${ImageName}:${Tag} --record -n $namespace
-      done
-
-.deploy-dev:
-  stage: deploy
-  variables:
-    namespace: dev
-    GIT_CHECKOUT: "false" 
-  environment:
-    name: dev
-  needs:
-    - build
-  only:
-    - develop
-  before_script:
-    - export KUBECONFIG=$kubeconfig_dev
-    - echo "KUBECONFIG=$kubeconfig_dev"
-  script:
-    - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
-    - |
-      IFS=',' read -r -a componentArray <<< "$components_dev"
-      for component in "${componentArray[@]}" 
-      do
-         kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
-      done
-
-.deploy-staging:
-  stage: deploy
-  variables:
-    namespace: staging
-    GIT_CHECKOUT: "false" 
-  environment:
-    name: staging
-  needs:
-    - build
-  only:
-    - release/current
-  before_script:
-    - export KUBECONFIG=$kubeconfig_staging
-  script:
-    - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
-    - |
-      IFS=',' read -r -a componentArray <<< "$components_staging"
-      for component in "${componentArray[@]}" 
-      do
-         kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
-      done
-      
-.deploy-prod:
-  stage: deploy
-  variables:
-    namespace: prod
-    GIT_CHECKOUT: "false" 
-  environment:
-    name: prod
-  needs:
-    - build
-  only:
-    - master
-  before_script:
-    - export KUBECONFIG=$kubeconfig_prod
-  when: manual
-  script:
-    - export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
-    - |
-      IFS=',' read -r -a componentArray <<< "$components_prod"
-      for component in "${componentArray[@]}" 
-      do
-         kubectl set image deployment/${component} ${component}=${ImageName}:${TAG} --record -n $namespace
       done
 
 notification:
