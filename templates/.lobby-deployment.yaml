@@ -11,7 +11,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375
   config: "kubeconfig"
-  
+
 .build:
   stage: build
   image: pgtgs/tgs-lobby-build:latest
@@ -39,6 +39,7 @@ variables:
 
 .deploy-base:
   stage: deploy
+  image: bitnami/kubectl:1.28.0
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
