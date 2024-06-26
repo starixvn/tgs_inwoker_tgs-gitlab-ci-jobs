@@ -23,7 +23,6 @@ variables:
       git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
       git submodule sync
       git submodule update --remote 
-
   script:
     - | 
       node --version
