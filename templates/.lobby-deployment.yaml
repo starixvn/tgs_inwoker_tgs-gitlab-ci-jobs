@@ -4,9 +4,6 @@ stages:
   - undo
 
 variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375
   config: "kubeconfig"
 
 .build:
@@ -15,6 +12,9 @@ variables:
   services:
     - docker:20.10.16-dind
   variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
     GIT_STRATEGY: clone
     GIT_SUBMODULE_STRATEGY: normal
     GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
