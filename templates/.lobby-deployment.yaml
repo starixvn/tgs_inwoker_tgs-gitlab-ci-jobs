@@ -39,7 +39,9 @@ variables:
 
 .deploy-base:
   stage: deploy
-  image: bitnami/kubectl:1.30
+  image: 
+    name: bitnami/kubectl:1.30
+    entrypoint: [""]
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
@@ -49,7 +51,6 @@ variables:
   script:
     - | 
       IFS=',' read -r -a components_array <<< "$Components"
-
       for component in "${components_array[@]}"; do
         echo "Deploying component: $component"
         kubectl set image deployment/$component $component=${ImageName}:${Tag} --record -n $namespace
