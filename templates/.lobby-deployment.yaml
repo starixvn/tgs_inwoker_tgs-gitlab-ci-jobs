@@ -23,6 +23,10 @@ variables:
       git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
       git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
       git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
+      nvm use 16.14.0
+      node --version
+      npm --version
+
   script:
     - | 
       docker info
