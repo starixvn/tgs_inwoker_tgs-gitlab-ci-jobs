@@ -4,9 +4,6 @@ stages:
   - undo
 
 variables:
-  GIT_STRATEGY: clone
-  GIT_SUBMODULE_STRATEGY: normal
-  GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375
@@ -17,15 +14,19 @@ variables:
   image: pgtgs/tgs-lobby-build:latest
   services:
     - docker:20.10.16-dind
+  variables:
+    GIT_STRATEGY: fetch
+    GIT_SUBMODULE_STRATEGY: normal
+    GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   script:
     - | 
       docker info
       docker login -u $docker_user -p $docker_pwd
-      git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
-      git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
-      git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
-      git submodule init
-      git submodule update --recursive --remote
+      # git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
+      # git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
+      # git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
+      # git submodule init
+      # git submodule update --recursive --remote
       export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
       echo "${TAG}" > tag.txt
       docker build -t ${ImageName}:${TAG} .
@@ -42,6 +43,8 @@ variables:
   image: 
     name: bitnami/kubectl:1.30
     entrypoint: [""]
+  variables:
+    GIT_STRATEGY: none
   before_script:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
