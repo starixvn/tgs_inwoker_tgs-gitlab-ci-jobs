@@ -17,7 +17,7 @@ variables:
   variables:
     GIT_STRATEGY: fetch
     GIT_SUBMODULE_STRATEGY: normal
-    GIT_SUBMODULE_UPDATE_FLAGS: "--remote --recursive"
+    GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   before_script: 
     - | 
       git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
