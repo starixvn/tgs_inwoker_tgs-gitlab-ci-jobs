@@ -44,9 +44,10 @@ variables:
     - export KUBECONFIG="${config}_${namespace}"
     - export KUBECONFIG=${!KUBECONFIG}
     - export Components=${!components}
+    - Tag=$(cat tag.txt)
+    - echo "Tag=$Tag"
   script:
     - | 
-      Tag=$(cat tag.txt)
       IFS=',' read -r -a components_array <<< "$Components"
 
       for component in "${components_array[@]}"; do
