@@ -60,7 +60,7 @@ variables:
         kubectl set image deployment/$component $component=${ImageName}:${Tag} --record -n $namespace
       done
 
-notification:
+.notification:
   stage: .post
   script: 
     - printenv
