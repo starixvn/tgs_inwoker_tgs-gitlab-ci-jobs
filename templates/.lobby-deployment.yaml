@@ -49,8 +49,6 @@ variables:
   variables:
     GIT_STRATEGY: none
   before_script:
-    - export KUBECONFIG="${config}_${namespace}"
-    - export KUBECONFIG=${!KUBECONFIG}
     - export Components=${!components}
     - Tag=$(cat tag.txt)
     - echo "Tag=$Tag"
