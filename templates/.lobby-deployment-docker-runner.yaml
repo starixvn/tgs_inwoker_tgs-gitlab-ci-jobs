@@ -19,9 +19,10 @@ variables:
     GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
   before_script: 
     - | 
+      git config --file=.gitmodules submodule.src/components/Common.branch $CI_COMMIT_BRANCH
       git config --file=.gitmodules submodule.src/components/Wap.branch $CI_COMMIT_BRANCH
       git config --file=.gitmodules submodule.src/components/App/Account.branch $CI_COMMIT_BRANCH
-      git config --file=.gitmodules submodule.src/api-services.branch $CI_COMMIT_BRANCH
+      git config --file=.gitmodules submodule.src/api-services.branch 
       git submodule sync
       git submodule update --recursive --remote
   script:
