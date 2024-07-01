@@ -11,7 +11,7 @@ variables:
     GIT_STRATEGY: clone
     GIT_SUBMODULE_DEPTH: 1
     GIT_SUBMODULE_STRATEGY: recursive
-    GIT_SUBMODULE_UPDATE_FLAGS: --jobs 4
+    GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
     # https://docs.gitlab.com/ee/ci/git_submodules.html
   before_script: 
     - | 
