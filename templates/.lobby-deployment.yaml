@@ -16,10 +16,10 @@ variables:
     # https://docs.gitlab.com/ee/ci/git_submodules.html
   before_script: 
     - | 
-      sh "git config --file=.gitmodules submodule.src/components/Wap.branch $Submodule_Branch";
-      sh "git config --file=.gitmodules submodule.src/components/App/Account.branch $Submodule_Branch";
-      sh "git config --file=.gitmodules submodule.src/api-services.branch $Submodule_Branch";
-      sh "git config --file=.gitmodules submodule.src/components/Common.branch $Submodule_Branch";
+      git config --file=.gitmodules submodule.src/components/Wap.branch $Submodule_Branch
+      git config --file=.gitmodules submodule.src/components/App/Account.branch $Submodule_Branch
+      git config --file=.gitmodules submodule.src/api-services.branch $Submodule_Branch
+      git config --file=.gitmodules submodule.src/components/Common.branch $Submodule_Branch
       git submodule sync
       git submodule update --recursive --remote
   script:
