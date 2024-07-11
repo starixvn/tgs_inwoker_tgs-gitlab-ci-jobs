@@ -37,6 +37,12 @@ variables:
     expire_in: "7 days"
     paths:
       - tag.txt
+  tags:
+    - local-build
+  only:
+    - master
+    - release/current
+    - develop
 
 .deploy-base:
   stage: deploy
