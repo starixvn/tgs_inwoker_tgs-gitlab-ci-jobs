@@ -73,7 +73,7 @@ variables:
   tags:
     - dev
   needs:
-    - push-docker-image
+    - build
 
 .deploy-k8s-staging:
   extends: .deploy-base
@@ -85,7 +85,7 @@ variables:
   tags:
     - staging
   needs:
-    - deploy
+    - build
   when: manual
 
 .deploy-k8s-prod:
@@ -98,7 +98,7 @@ variables:
   tags:
     - prod
   needs:
-    - deploy-staging
+    - build
   when: manual
 
 
