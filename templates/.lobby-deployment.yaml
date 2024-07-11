@@ -63,24 +63,8 @@ variables:
         kubectl set image deployment/$component $component=${ImageName}:${Tag} --record -n $namespace
       done
 
-# .gitlab-ci-templates.yml
-
-.deploy-k8s:
-  extends: .deploy-base
-  image:
-    name: pgtgs/tgs-backend-deploy:latest
-  tags:
-    - kubernetes
-    - deploy
-  needs:
-    - job: push-k8s-template
-      artifacts: true
-  only:
-    - main
-  when: on_success
-
 .deploy-k8s-dev:
-  extends: .deploy-k8s
+  extends: .deploy-base
   variables:
     namespace: dev
   environment:
@@ -92,7 +76,7 @@ variables:
     - push-docker-image
 
 .deploy-k8s-staging:
-  extends: .deploy-k8s
+  extends: .deploy-base
   variables:
     namespace: staging
   environment:
@@ -105,7 +89,7 @@ variables:
   when: manual
 
 .deploy-k8s-prod:
-  extends: .deploy-k8s
+  extends: .deploy-base
   variables:
     namespace: prod
   environment:
