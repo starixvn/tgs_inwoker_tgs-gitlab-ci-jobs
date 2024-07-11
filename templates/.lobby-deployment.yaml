@@ -69,7 +69,6 @@ variables:
     namespace: dev
   environment:
     name: dev
-  stage: deploy
   tags:
     - dev
   needs:
@@ -81,7 +80,6 @@ variables:
     namespace: staging
   environment:
     name: staging
-  stage: deploy
   tags:
     - staging
   needs:
@@ -94,7 +92,6 @@ variables:
     namespace: prod
   environment:
     name: prod
-  stage: deploy
   tags:
     - prod
   needs:
