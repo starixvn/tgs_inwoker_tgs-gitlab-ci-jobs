@@ -81,7 +81,7 @@ variables:
     namespace: staging
   environment:
     name: staging
-  stage: deploy-staging
+  stage: deploy
   tags:
     - staging
   needs:
