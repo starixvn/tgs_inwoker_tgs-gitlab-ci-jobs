@@ -105,7 +105,7 @@ variables:
   when: manual
 
 
-.notification:
+notification:
   stage: .post
   script: 
     - printenv
