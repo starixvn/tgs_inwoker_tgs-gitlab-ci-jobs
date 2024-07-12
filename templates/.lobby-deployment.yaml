@@ -26,6 +26,7 @@ variables:
     - | 
       node --version
       docker info
+      echo "docker_pwd=$docker_pwd"
       docker login -u $docker_user -p $docker_pwd
       export TAG="$(date -d $CI_PIPELINE_CREATED_AT +%Y%m%d).$CI_PIPELINE_IID"
       echo "${TAG}" > tag.txt
