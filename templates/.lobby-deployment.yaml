@@ -13,10 +13,11 @@ variables:
     GIT_SUBMODULE_STRATEGY: recursive
     GIT_SUBMODULE_UPDATE_FLAGS: "--remote --checkout --no-single-branch"
     Submodule_Branch: $CI_COMMIT_BRANCH
+    Wap_Submodule_Branch: $CI_COMMIT_BRANCH
     # https://docs.gitlab.com/ee/ci/git_submodules.html
   before_script: 
     - | 
-      git config --file=.gitmodules submodule.src/components/Wap.branch $Submodule_Branch
+      git config --file=.gitmodules submodule.src/components/Wap.branch $Wap_Submodule_Branch
       git config --file=.gitmodules submodule.src/components/App/Account.branch $Submodule_Branch
       git config --file=.gitmodules submodule.src/api-services.branch $Submodule_Branch
       git config --file=.gitmodules submodule.src/components/Common.branch $Submodule_Branch
