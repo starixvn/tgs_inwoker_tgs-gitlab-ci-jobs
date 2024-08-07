@@ -10,3 +10,10 @@ stages:
     - curl -X POST --form "token=$t8_token" --form "ref=$CI_COMMIT_BRANCH" "https://gitlab.com/api/v4/projects/33534904/trigger/pipeline"
     - curl -X POST --form "token=$t10_token" --form "ref=$CI_COMMIT_BRANCH" "https://gitlab.com/api/v4/projects/36498979/trigger/pipeline"
     - curl -X POST --form "token=$t20_token" --form "ref=$CI_COMMIT_BRANCH" "https://gitlab.com/api/v4/projects/49105169/trigger/pipeline"
+  only:
+    - master
+    - release/current
+    - develop
+    - dev/369
+    - stg/369
+    - dev/369
