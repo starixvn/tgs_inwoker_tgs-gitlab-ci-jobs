@@ -23,6 +23,7 @@ variables:
       git config --file=.gitmodules submodule.src/components/Common.branch $Submodule_Branch
       git submodule sync
       git submodule update --recursive --remote
+      git config status.submoduleSummary true
   script:
     - | 
       node --version
