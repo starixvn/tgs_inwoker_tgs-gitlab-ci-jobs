@@ -16,4 +16,4 @@ stages:
     - develop
     - dev/369
     - stg/369
-    - dev/369
+    - "369"
