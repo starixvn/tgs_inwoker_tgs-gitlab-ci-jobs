@@ -50,6 +50,7 @@ variables:
     - dev/v226
     - stg/v226
     - v226
+  when: manual
 
 .deploy-base:
   stage: deploy
