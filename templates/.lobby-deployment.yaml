@@ -47,6 +47,9 @@ variables:
     - dev/369
     - stg/369
     - "369"
+    - dev/v226
+    - stg/v226
+    - v226
 
 .deploy-base:
   stage: deploy
