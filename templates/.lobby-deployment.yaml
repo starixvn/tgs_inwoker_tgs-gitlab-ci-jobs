@@ -44,6 +44,7 @@ variables:
     - master
     - release/current
     - develop
+  when: manual
 
 .deploy-base:
   stage: deploy
@@ -89,7 +90,6 @@ variables:
     - build
   only:
     - release/current
-  when: manual
 
 .deploy-k8s-prod:
   extends: .deploy-base
@@ -103,8 +103,6 @@ variables:
     - build
   only:
     - master
-  when: manual
-
 
 notification:
   stage: .post
