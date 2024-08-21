@@ -44,7 +44,9 @@ variables:
     - master
     - release/current
     - develop
-  when: manual
+    - dev/369
+    - stg/369
+    - "369"
 
 .deploy-base:
   stage: deploy
