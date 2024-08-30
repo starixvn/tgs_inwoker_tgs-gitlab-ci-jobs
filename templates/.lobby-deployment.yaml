@@ -84,6 +84,19 @@ variables:
   only:
     - develop
 
+.deploy-k8s-staging_for_develop:
+  extends: .deploy-base
+  variables:
+    namespace: staging
+  environment:
+    name: staging
+  tags:
+    - staging
+  needs:
+    - build
+  only:
+    - develop
+
 .deploy-k8s-staging:
   extends: .deploy-base
   variables:
