@@ -17,6 +17,8 @@ variables:
     # https://docs.gitlab.com/ee/ci/git_submodules.html
   before_script: 
     - | 
+      echo "Submodule_Branch=${Submodule_Branch}" 
+      echo "Wap_Submodule_Branch=${Wap_Submodule_Branch}" 
       git config --file=.gitmodules submodule.src/components/Wap.branch $Wap_Submodule_Branch
       git config --file=.gitmodules submodule.src/components/App/Account.branch $Submodule_Branch
       git config --file=.gitmodules submodule.src/api-services.branch $Submodule_Branch
