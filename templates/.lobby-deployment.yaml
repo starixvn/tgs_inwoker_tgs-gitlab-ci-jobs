@@ -34,6 +34,7 @@ variables:
       echo "${TAG}" > tag.txt
       docker build -t ${ImageName}:${TAG} .
       docker push ${ImageName}:${TAG}
+      echo "${ImageName}:${TAG}" 
   artifacts:
     name: npm
     untracked: false
